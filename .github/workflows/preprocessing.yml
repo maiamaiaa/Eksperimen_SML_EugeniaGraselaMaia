@@ -1,0 +1,37 @@
+name: Heart Disease Preprocessing Workflow
+
+on:
+  push:
+    paths:
+      - 'heart_raw/heart_raw.csv'
+      - 'preprocessing/automate_EugeniaGraselaMaia.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  data-processing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: pip install pandas scikit-learn
+
+      - name: Run Preprocessing Script
+        run: python preprocessing/automate_EugeniaGraselaMaia.py
+
+      - name: Commit and Push Results
+        run: |
+          git config --local user.email "eugeniamaiaaa@gmail.com"
+          git config --local user.name "maiamaiaa"
+          git add preprocessing/heart_preprocessed.csv
+          git commit -m "Automated: Update preprocessed data by Eugenia" || echo "No changes to commit"
+          git push
