@@ -1,0 +1,22 @@
+artifact_path: file:d:/uni/sem5/asah/Eksperimen_SML_Eugenia/Membangun_model/mlruns/2/models/m-4d288559cdfe4dc1bbd382badcdcf113/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.13.7
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.7.2
+mlflow_version: 3.8.0
+model_id: m-4d288559cdfe4dc1bbd382badcdcf113
+model_size_bytes: 265412
+model_uuid: m-4d288559cdfe4dc1bbd382badcdcf113
+prompts: null
+run_id: 972fa6a05328436e95477cbed2ef9613
+utc_time_created: '2025-12-22 19:15:47.776596'
