@@ -1,39 +1,29 @@
 import pandas as pd
-import numpy as np
 from sklearn.preprocessing import StandardScaler
 import os
 
 def run_preprocessing():
-    input_path = "heart_raw/heart_raw.csv"
-    output_path = "preprocessing/heart_preprocessed.csv"
-    
-    if not os.path.exists(input_path):
+    if os.path.exists("heart_raw/heart_raw.csv"):
+        input_path = "heart_raw/heart_raw.csv"
+        output_path = "preprocessing/heart_preprocessed.csv"
+    else:
         input_path = "../heart_raw/heart_raw.csv"
         output_path = "heart_preprocessed.csv"
-
-    # Load
+    
+    print(f"Memproses data dari: {input_path}")
     df = pd.read_csv(input_path)
     
-    # 1. Handling Missing Values
     df['ca'] = df['ca'].fillna(df['ca'].median())
     df['thal'] = df['thal'].fillna(df['thal'].mode()[0])
+    df['target'] = df['num'].apply(lambda x: 1 if x > 0 else 0)
+    df.drop(columns=['num'], inplace=True)
     
-    # 2. Handling Duplicates
-    df.drop_duplicates(inplace=True)
-    
-    # 3. Binning Target (Binarisasi)
-    if 'num' in df.columns:
-        df['target'] = df['num'].apply(lambda x: 1 if x > 0 else 0)
-        df.drop(columns=['num'], inplace=True)
-    
-    # 4. Standarisasi Fitur
     scaler = StandardScaler()
-    features_to_scale = ['age', 'trestbps', 'chol', 'thalach', 'oldpeak']
-    df[features_to_scale] = scaler.fit_transform(df[features_to_scale])
+    numeric_cols = ['age', 'trestbps', 'chol', 'thalach', 'oldpeak']
+    df[numeric_cols] = scaler.fit_transform(df[numeric_cols])
     
-    # 5. Save
     df.to_csv(output_path, index=False)
-    print("Otomatisasi Preprocessing Eugenia Berhasil!")
+    print(f"Berhasil disimpan ke: {output_path}")
 
 if __name__ == "__main__":
     run_preprocessing()
