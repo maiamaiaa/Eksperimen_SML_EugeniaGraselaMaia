@@ -1,0 +1,41 @@
+name: CI Workflow Advance
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  training-and-container:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: pip install mlflow scikit-learn pandas
+
+      - name: Run MLflow Project
+        run: mlflow run ./Workflow-CI/MLProject --no-conda
+
+      - name: Build Docker Image
+        run: |
+          RUN_ID=$(ls -t Workflow-CI/MLProject/mlruns/0 | head -n 1)
+          MODEL_URI="Workflow-CI/MLProject/mlruns/0/$RUN_ID/artifacts/model_artifact"
+          mlflow models build-docker -m $MODEL_URI -n ${{ secrets.DOCKERHUB_USERNAME }}/heart-model:latest
+
+      - name: Login & Push to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/heart-model:latest
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: model-artifact
+          path: Workflow-CI/MLProject/mlruns/0/*/artifacts/model_artifact/
