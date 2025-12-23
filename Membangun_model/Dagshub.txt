@@ -1,0 +1,2 @@
+🏃 View run RF_Manual_Logging at: https://dagshub.com/maiamaiaa/Eksperimen_SML_EugeniaGraselaMaia.mlflow/#/experiments/0/runs/6ae5c99240704979aaea31ecd17a55b0
+🧪 View experiment at: https://dagshub.com/maiamaiaa/Eksperimen_SML_EugeniaGraselaMaia.mlflow/#/experiments/0
