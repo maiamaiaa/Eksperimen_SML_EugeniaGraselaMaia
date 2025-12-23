@@ -28,7 +28,7 @@ jobs:
       - name: Run Preprocessing Script
         run: python preprocessing/automate_EugeniaGraselaMaia.py
 
-      - name: Commit and Push Results
+              - name: Commit and Push Results
         run: |
           git config --local user.email "eugeniamaiaaa@gmail.com"
           git config --local user.name "maiamaiaa"
