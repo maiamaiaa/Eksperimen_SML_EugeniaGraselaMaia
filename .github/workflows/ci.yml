@@ -25,8 +25,13 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          RUN_ID=$(ls -t Workflow-CI/MLProject/mlruns/0 | head -n 1)
-          MODEL_URI="Workflow-CI/MLProject/mlruns/0/$RUN_ID/artifacts/model_artifact"
+          # Cari Run ID di direktori root (mlruns/) karena --env-manager local menyimpannya di sini
+          RUN_ID=$(ls -t mlruns/0 | head -n 1)
+          MODEL_URI="mlruns/0/$RUN_ID/artifacts/model_artifact"
+          
+          # Verifikasi path sebelum build
+          echo "Using Model URI: $MODEL_URI"
+          
           mlflow models build-docker -m $MODEL_URI -n ${{ secrets.DOCKERHUB_USERNAME }}/heart-model:latest
 
       - name: Login & Push to Docker Hub
@@ -38,4 +43,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: model-artifact
-          path: Workflow-CI/MLProject/mlruns/0/*/artifacts/model_artifact/
+          path: mlruns/0/*/artifacts/model_artifact/
